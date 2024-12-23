@@ -3,6 +3,7 @@ import { GetActiveAndUpcomingChallengesApi } from "../Api/Challenges";
 import { useCookies } from "react-cookie";
 import DisplayChallenges from "../components/DisplayChallenges";
 import {GetCurrentUserInfoApi} from "../Api/GetCurrentUserInfo";
+import {Spin} from "antd";
 
 export default function ChallengeList() {
   const [loading, setLoading] = useState(true);
@@ -53,10 +54,14 @@ export default function ChallengeList() {
   }, [cookies.jwt]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center h-screen">
+      <Spin size="large"/>
+    </div>;
   }
   if (userLoading) {
-    return <div>Loading user info...</div>
+    return <div className="flex justify-center items-center h-screen">
+      <Spin size="large"/>
+    </div>
   }
 
   if (error) {

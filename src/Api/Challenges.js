@@ -1,4 +1,5 @@
 import axios from "axios";
+import {redirect, useNavigate} from "react-router-dom";
 
 const DOMAIN = process.env.REACT_APP_API_URL || "http://127.0.0.1:3001"; // Fallback to default if no env variable
 
@@ -29,24 +30,28 @@ export const AddChallengesApi = async (jwtToken, bodyObject) => {
 };
 
 
-export const GetActiveAndUpcomingChallengesApi = async (jwtToken) => {
+
+
+
+
+// Add this to each function where navigation is required
+export const GetActiveAndUpcomingChallengesApi = async (jwtToken, navigate) => {
   try {
     if (!jwtToken) {
       return [[], "Authorization token is missing or invalid"];
     }
 
     const response = await axios.get(`${DOMAIN}/api/v1/challenges/active_and_upcoming`,{
-    headers: {
-      Authorization: jwtToken,
-    },
-  });
+      headers: {
+        Authorization: jwtToken,
+      },
+    });
     if (response.status === 200) {
       return [response.data, ""];
     } else {
       return [[], "Failed to fetch challenges. Please try again."];
     }
-  }
-catch (error) {
+  } catch (error) {
     let errorMessage = "Error occurred while fetching challenges.";
     if (error.response) {
       const errorData = error.response?.data;
@@ -63,25 +68,24 @@ catch (error) {
 
 
 
-
-export const GetSingleChallengeDetailsApi = async (jwtToken,id) => {
+export const GetSingleChallengeDetailsApi = async (jwtToken, id, navigate) => {
   try {
     if (!jwtToken) {
       return [[], "Authorization token is missing or invalid"];
     }
 
-    const response = await axios.get(`${DOMAIN}/api/v1/challenges/${id}`,{
+    const response = await axios.get(`${DOMAIN}/api/v1/challenges/${id}`, {
       headers: {
         Authorization: jwtToken,
       },
     });
-    if (response.status === 200) {
+
+     if (response.status === 200) {
       return [response.data, ""];
     } else {
       return [[], "Failed to fetch challenge. Please try again."];
     }
-  }
-  catch (error) {
+  } catch (error) {
     let errorMessage = "Error occurred while fetching challenge.";
     if (error.response) {
       const errorData = error.response?.data;
@@ -94,7 +98,6 @@ export const GetSingleChallengeDetailsApi = async (jwtToken,id) => {
     return [[], errorMessage];
   }
 };
-
 
 
 

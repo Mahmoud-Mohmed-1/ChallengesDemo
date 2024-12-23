@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {createBrowserRouter, redirect, RouterProvider, useNavigate} from 'react-router-dom';
 import App from './App';
 import Authentication, { PageType } from './pages/Authentication';
 import './index.css';
@@ -24,7 +24,7 @@ const AppRoutes = () => {
 
     // If user data is not loaded yet, show a loading message
     if (!user) {
-        return <div>Loading...</div>;
+      redirect('/login');
     }
 
     return (

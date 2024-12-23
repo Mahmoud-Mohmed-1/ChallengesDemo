@@ -1,7 +1,7 @@
 import { Button, Alert, Spin } from "antd";
 import { useCookies } from "react-cookie";
 import { logoutApi } from "../Api/authentication";
-import { useNavigate } from "react-router-dom";
+import {redirect, useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Header() {
@@ -16,22 +16,24 @@ export default function Header() {
     useEffect(() => {
         // Fetch user info from sessionStorage
         const fetchUser = async () => {
-            const storedUser = window.sessionStorage.getItem("user");
+            const storedUser = window.localStorage.getItem("user");
             if (storedUser) {
                 setUser(JSON.parse(storedUser));
+            }else {
+                redirect("/login");
             }
             setLoading(false); // Stop loading once the data is retrieved
         };
         fetchUser();
     }, []);
-
     const adminMails = process.env.REACT_APP_ADMINS_LIST
       ? process.env.REACT_APP_ADMINS_LIST.split(",")
       : [];
-    const isAdmin = user && adminMails.includes(user.user.email); // Ensure user exists before checking
+    const isAdmin = user && adminMails.includes(user?.user.email);
     const handleLogout = async () => {
         if (!jwt) {
             setAlertMessage("You are not logged in.");
+            navigate("/login");
             setAlertType("info");
             return;
         }
